@@ -49,24 +49,19 @@ one_to_one = {
     'z': ('9', 0.75)
 }
 
-
-def diff_key_time(inp):  # add time between pressing different buttons
-
+"""
+# add time between pressing different buttons
+def diff_key_time(inp):
     t = 0
-
     # current index of number in st
     curr_key = one_to_one[inp[0]][0]
-
     # compare every function
     for letter in inp[1:]:
-
         # check if each letter is stored in corresponding buttons
         new_key = one_to_one[letter]
-
         if new_key[0] != curr_key:
             curr_key = new_key[0]
             t += 0.25
-
     return t
 
 
@@ -76,22 +71,18 @@ def add_cap_time(inp):
 
 def same_key_pause(inp):
     t = 0
-
     # current index of number in st
     curr_key = one_to_one[inp[0]][0]
-
     # compare every function
     for letter in inp[1:]:
-
         # check if each letter is stored in corresponding buttons
         new_key = one_to_one[letter]
         if new_key[0] == curr_key:
             t += 0.5
         else:
             curr_key = new_key[0]
-
     return t
-
+"""
 # add letters corresponding to
 
 
@@ -118,7 +109,7 @@ def calculate_min_string_time(strings):
 
     for s in strings:
         s = s[:-1]
-        t = calculate_time(s)
+        t = addTime(s) 
 
         if t < min_time:
             min_time = t
@@ -129,6 +120,26 @@ def calculate_min_string_time(strings):
 
     return min_strings, min_time
 
+def addTime(string):
+    previousKey = string[0].lower()
+    t = 0 
+
+    for index, char in enumerate(string): 
+        if char.isupper():
+            t += 2 
+        
+        char = char.lower()
+
+        if one_to_one[char][0] != one_to_one[previousKey][0]: 
+            t += 0.25
+        if one_to_one[char][0] == one_to_one[previousKey][0] and index != 0: 
+            t += 0.5 
+
+        t += one_to_one[char][1]
+
+        previousKey = char 
+    
+    return t
 
 if __name__ == "__main__":
     for i in range(1, 5):
