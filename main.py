@@ -13,14 +13,14 @@ numbers_to_letters = {
     '7': ['p', 'q', 'r', 's'],
     '8': ['t', 'u', 'v'],
     '9': ['w', 'x', 'y', 'z'],
-    '*': ['+'],
+    '*': ['*'],
     '0': ['_'],
-    '#': ["home"]
+    '#': ["#"]
 }
 
 one_to_one = {
-    "home": ['#', 0.0],
-    '+': ['*', 0.0],
+    "#": ['#', 0.0],
+    '*': ['*', 0.0],
     "voicemail": ['1', 0.0],
     '_': ['0', 0.0],
     'a': ['2', 0.0],
@@ -55,39 +55,49 @@ one_to_one = {
 # calculates the total time it takes to type a string
 def calculate_total_time(string):
     previousKey = string[0].lower()
-    t = 0
+    time = 0
 
     for index, char in enumerate(string):
+        # add the time from holding a key for an uppercase letter
         if char.isupper():
-            t += 2
+            time += 2
 
+        # set all characters to lowercase for easier handling
         char = char.lower()
 
+        # add the time from switching between different keys
         if one_to_one[char][0] != one_to_one[previousKey][0]:
-            t += 0.25
+            time += 0.25
+        
+        # add the time from typing consecutive letters on the same key
         if one_to_one[char][0] == one_to_one[previousKey][0] and index != 0:
-            t += 0.5
+            time += 0.5
 
-        t += one_to_one[char][1]
+        # add the time from typing each key
+        time += one_to_one[char][1]
 
+        # set the previous key to the current key
         previousKey = char
 
-    return t
+    return time
 
-# get the string that takes the least time to type
+# gets the string that takes the least time to type
 def get_min_string_time(strings):
 
-    min_time = 10**9
+    min_time = float('inf')
     min_strings = []
 
+    # iterates through the strings and calculates the time it takes to type each string 
     for s in strings:
         s = s.strip()
         t = calculate_total_time(s)
 
+        # If the time taken is smaller than minimum, update the minimum
         if t < min_time:
             min_time = t
             min_strings = [s]
 
+        # If time is equal to the minimum append string 
         elif t == min_time:
             min_strings.append(s)
 
@@ -99,7 +109,7 @@ def get_min_string_time(strings):
 def changeDict(broken):
     # first, make a list of all the broken letter
     lBroke = numbers_to_letters[broken]
-    lReMap = ["home", '+', "voicemail", '_']
+    lReMap = ["#", '*', "voicemail", '_']
 
     for i in range(len(lBroke)):
         one_to_one[lBroke[i]] = one_to_one[lReMap[i]]
@@ -117,4 +127,6 @@ if __name__ == "__main__":
             broken_key = line.strip()
             break
         changeDict(broken_key)
+        print("aaa", calculate_total_time("abcabcabc"))
         print(get_min_string_time(file))
+    
