@@ -58,7 +58,7 @@ def calculate_total_time(string):
     time = 0
 
     for index, char in enumerate(string):
-        # add the time from holding a key for an uppercase letter
+        # add the time from pressing the uppercase key
         if char.isupper():
             time += 2
 
